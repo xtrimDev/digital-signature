@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate Your Digital Sigature.">
+    <title>DigSign</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        .app {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #836FFF;
+        }
+
+        .app .container {
+            width: 90%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px 15px;
+            color: #56595e;
+            font-size: large;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app .container .header {
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .app .container .content {
+            height: 400px;
+            border: 2px solid rgba(86, 89, 94, 0.726);
+            border-radius: 10px;
+            border-style: dashed;
+            padding: 15px;
+        }
+
+        .app .container .content #myCanvas {
+            height: 100%;
+            width: 100%;
+        }
+
+        .app .container .footer {
+            padding-top: 10px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .app .container .footer button {
+            padding: 10px 15px;
+            outline: none;
+            border: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        @media screen and (min-width: 800px) {
+            .app .container {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="container">
+            <div class="header">
+                <div class="title">
+                    <span>Draw Signature</span>
+                </div>
+            </div>
+            <div class="content">
+                <canvas id="myCanvas"></canvas>
+            </div>
+            <div class="footer">
+                <div class="tools">
+                    <button id="clear_btn">clear</button>
+                </div>
+                <div class="action">
+                    <button id="save_sign">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const save_btn = document.getElementById("save_sign");
+        const clear_btn = document.getElementById("clear_btn");
+        
+        const ctx = canvas.getContext('2d');
+        var isDrawing = false;
+
+        canvas.setAttribute('width', canvas.offsetWidth);
+        canvas.setAttribute('height', canvas.offsetHeight);
+
+        ctx.lineWidth = 10;
+
+        canvas.addEventListener("mousemove", (e) => {
+            if (!isDrawing) return;
+            
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        });
+
+        canvas.addEventListener('mousedown', function(e) {
+            isDrawing = true;
+
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        });
+
+        canvas.addEventListener('mouseup', function(e) {
+            isDrawing = false;
+        });
+
+        clear_btn.addEventListener("click", () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        function isCanvasEmpty(canvas) {
+            const blankCanvas = document.createElement('canvas');
+            blankCanvas.width = canvas.width;
+            blankCanvas.height = canvas.height;
+            return canvas.toDataURL() === blankCanvas.toDataURL();
+        }
+
+        save_btn.addEventListener("click", () => {
+            if (!isCanvasEmpty(canvas)) {
+                const link = document.createElement("a");
+                link.download = `${Date.now()}.jpg`;
+                link.href = canvas.toDataURL();
+                link.click();
+            } else {
+                alert("No signature found!");
+            }
+        })
+    </script>
+</body>
+</html>
