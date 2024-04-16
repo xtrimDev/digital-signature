@@ -41,6 +41,7 @@
 
         .app .container .content {
             height: 400px;
+            max-height: 70vh;
             border: 2px solid rgba(86, 89, 94, 0.726);
             border-radius: 10px;
             border-style: dashed;
@@ -127,8 +128,19 @@
             isDrawing = false;
         });
 
+        document.addEventListener('mousemove', function(event) {
+            if (!canvas.contains(event.target)) {
+                isDrawing = false;
+            }
+        });
+
         clear_btn.addEventListener("click", () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault()
+            alert("This only works on Laptop or desktop.")
         });
 
         function isCanvasEmpty(canvas) {
