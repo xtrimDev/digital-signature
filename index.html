@@ -15,8 +15,10 @@
         }
 
         .app {
-            height: 100vh;
-            width: 100vw;
+            min-height: 100vh;
+            min-width: 100vw;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -32,6 +34,7 @@
             font-size: large;
             display: flex;
             flex-direction: column;
+            margin: 2rem 0;
         }
 
         .app .container .header {
@@ -40,8 +43,7 @@
         }
 
         .app .container .content {
-            height: 400px;
-            max-height: 70vh;
+            height: 80%;
             border: 2px solid rgba(86, 89, 94, 0.726);
             border-radius: 10px;
             border-style: dashed;
@@ -69,11 +71,19 @@
             border-radius: 10px;
         }
 
-        @media screen and (min-width: 800px) {
+        @media screen and (min-width: 900px) {
             .app .container {
-                width: 50%;
+                width: 800px;
+            }
+
+            .app .container .content {
+                height: 400px;
             }
         }
+
+        /* @media screen and (max-width: ) {
+            
+        } */
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -128,19 +138,8 @@
             isDrawing = false;
         });
 
-        document.addEventListener('mousemove', function(event) {
-            if (!canvas.contains(event.target)) {
-                isDrawing = false;
-            }
-        });
-
         clear_btn.addEventListener("click", () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-        });
-
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault()
-            alert("This only works on Laptop or desktop.")
         });
 
         function isCanvasEmpty(canvas) {
